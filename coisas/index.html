@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Site de Vídeos do YouTube</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilo do cabeçalho */
+        header {
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Estilo do contêiner principal */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        /* Estilos adicionais para o buscador */
+        #searchForm {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #searchResults {
+            width: 60%;
+        }
+        #videoDetails {
+            width: 30%;
+            position: sticky;
+            top: 20px;
+            height: 400px;
+            overflow-y: auto;
+        }
+        .video-item {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #000;
+            background-color: #000;
+            cursor: pointer;
+        }
+        .video-item img {
+            width: 200px;
+            height: 150px;
+        }
+        .video-item span {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #searchSuggestions {
+            position: absolute;
+            z-index: 1;
+            background-color: #f1f1f1;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+        #searchSuggestions option {
+            padding: 10px;
+            cursor: pointer;
+        }
+        #videoPlayer {
+            width: 640px;
+            height: 360px;
+            display: none;
+            margin: 0 auto;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background-color: #000;
+            padding: 10px;
+        }
+        #videoPlayer iframe {
+            width: 100%;
+            height: 100%;
+        }
+        #closeIcon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        #minimizeIcon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        #commentsIcon {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        #descriptionIcon {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        #loadMoreBtn {
+            display: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .video-container {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+            margin: 10px;
+        }
+        .video-container img {
+            width: 100%;
+            height: auto;
+        }
+        .video-title {
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .video-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+        .video-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        #videoDescription {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            z-index: 999;
+            padding: 20px;
+            font-size: 14px;
+            overflow-y: auto;
+        }
+        #videoDescription .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+        .video-container:hover #videoDescription {
+            display: block;
+        }
+        #videoDescription p {
+            margin-bottom: 10px;
+        }
+        #videoComments {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            z-index: 999;
+            padding: 20px;
+            font-size: 14px;
+            overflow-y: auto;
+        }
+        #videoComments .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+        .video-container:hover #videoComments {
+            display: block;
+        }
+ 
+        body {
+            background-color: #f44336;
+            animation: colorChange 5s infinite;
+        }
+
+        @keyframes colorChange {
+        0% {background-color: #f44336;}
+        10% {background-color: #9c27b0;}
+        20% {background-color: #3f51b5;}
+        30% {background-color: #2196f3;}
+        40% {background-color: #00bcd4;}
+        50% {background-color: #009688;}
+        60% {background-color: #4caf50;}
+        70% {background-color: #cddc39;}
+        80% {background-color: #ffc107;}
+        90% {background-color: #ff5722;}
+        100% {background-color: #607d8b;}
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Site de Vídeos Rival do YouTube</h1>
+    </header>
+    <main>
+        <!-- Buscador de Vídeos -->
+        <div id="searchForm">
+            <form onsubmit="return searchVideos()">
+                <input type="text" id="searchTerm" placeholder="Digite o título do vídeo" required>
+                <input type="submit" value="Buscar">
+                <datalist id="searchSuggestions"></datalist>
+            </form>
+        </div>
+
+        <!-- Resultados da Pesquisa no YouTube -->
+        <div id="searchResults"></div>
+        <button id="loadMoreBtn" onclick="loadMoreVideos(document.getElementById('searchTerm').value)">Carregar mais vídeos</button>
+
+        <!-- Detalhes do Vídeo Selecionado -->
+        <div id="videoDetails"></div>
+
+        <!-- Player de Vídeo -->
+        <div id="videoPlayer"></div>
+
+        <!-- Descrição do Vídeo -->
+        <div id="videoDescription"></div>
+
+        <!-- Comentários do Vídeo -->
+        <div id="videoComments"></div>
+
+        <!-- JavaScript para manipulação da API do YouTube -->
+        <script>
+            // Variáveis globais para armazenar os resultados da pesquisa e o próximo Token
+            let searchResults = [];
+            let nextPageToken = '';
+
+            // Função para realizar a pesquisa de vídeos no YouTube
+            function searchVideos() {
+                const searchTerm = document.getElementById('searchTerm').value;
+                const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchTerm)}&maxResults=5&type=video&key=AIzaSyCRkeAQ3cbtJmCwGg3Y1-I2BIcu6zSEdqE`;
+
+                fetch(searchUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResults = data.items;
+                        nextPageToken = data.nextPageToken;
+                        displaySearchResults(searchResults);
+                    })
+                    .catch(error => console.error('Erro na pesquisa: ', error));
+                    
+                return false; // Evita o recarregamento da página
+            }
+
+            // Função para exibir os resultados da pesquisa no YouTube
+            function displaySearchResults(results) {
+                const searchResultsDiv = document.getElementById('searchResults');
+                searchResultsDiv.innerHTML = '';
+
+                results.forEach(item => {
+                    const videoItem = createVideoItem(item);
+                    searchResultsDiv.appendChild(videoItem);
+                });
+
+                document.getElementById('loadMoreBtn').style.display = nextPageToken ? 'block' : 'none';
+            }
+
+            // Função para criar um item de vídeo
+            function createVideoItem(video) {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.onclick = () => showVideoDetails(video.id.videoId);
+
+                const videoThumbnail = document.createElement('img');
+                videoThumbnail.src = video.snippet.thumbnails.high.url;
+                videoItem.appendChild(videoThumbnail);
+
+                const videoTitle = document.createElement('span');
+                videoTitle.textContent = video.snippet.title;
+                videoItem.appendChild(videoTitle);
+
+                return videoItem;
+            }
+
+            // Função para exibir os detalhes de um vídeo
+            function showVideoDetails(videoId) {
+                const videoDetailsDiv = document.getElementById('videoDetails');
+                videoDetailsDiv.innerHTML = '';
+
+                const videoDetailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=AIzaSyCRkeAQ3cbtJmCwGg3Y1-I2BIcu6zSEdqE`;
+
+                fetch(videoDetailsUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const video = data.items[0];
+                        const videoDetailsContent = createVideoDetails(video);
+                        videoDetailsDiv.appendChild(videoDetailsContent);
+                    })
+                    .catch(error => console.error('Erro ao obter detalhes do vídeo: ', error));
+            }
+
+            // Função para criar o conteúdo dos detalhes do vídeo
+            function createVideoDetails(video) {
+                const videoContainer = document.createElement('div');
+                videoContainer.className = 'video-container';
+
+                const videoThumbnail = document.createElement('img');
+                videoThumbnail.src = video.snippet.thumbnails.high.url;
+                videoContainer.appendChild(videoThumbnail);
+
+                const videoTitle = document.createElement('div');
+                videoTitle.className = 'video-title';
+                videoTitle.textContent = video.snippet.title;
+                videoContainer.appendChild(videoTitle);
+
+                const videoControls = document.createElement('div');
+                videoControls.className = 'video-controls';
+                videoControls.onclick = () => showVideoPlayer(video.id);
+                videoContainer.appendChild(videoControls);
+
+                const playIcon = document.createElement('i');
+                playIcon.className = 'fas fa-play video-icon';
+                videoControls.appendChild(playIcon);
+
+                const descriptionIcon = document.createElement('i');
+                descriptionIcon.className = 'fas fa-info-circle video-icon';
+                descriptionIcon.onclick = () => showVideoDescription(video.snippet.description);
+                videoContainer.appendChild(descriptionIcon);
+
+                const commentsIcon = document.createElement('i');
+                commentsIcon.className = 'fas fa-comments video-icon';
+                commentsIcon.onclick = () => showVideoComments(video.id);
+                videoContainer.appendChild(commentsIcon);
+
+                return videoContainer;
+            }
+
+            // Função para exibir o player de vídeo
+            function showVideoPlayer(videoId) {
+                const videoPlayerDiv = document.getElementById('videoPlayer');
+                videoPlayerDiv.innerHTML = '';
+
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                iframe.allowFullscreen = true;
+                videoPlayerDiv.appendChild(iframe);
+
+                const closeIcon = document.createElement('i');
+                closeIcon.className = 'fas fa-times';
+                closeIcon.id = 'closeIcon';
+                closeIcon.onclick = () => videoPlayerDiv.style.display = 'none';
+                videoPlayerDiv.appendChild(closeIcon);
+
+                const minimizeIcon = document.createElement('i');
+                minimizeIcon.className = 'fas fa-window-minimize';
+                minimizeIcon.id = 'minimizeIcon';
+                minimizeIcon.onclick = () => iframe.style.display = 'none';
+                videoPlayerDiv.appendChild(minimizeIcon);
+
+                const commentsIcon = document.createElement('i');
+                commentsIcon.className = 'fas fa-comments';
+                commentsIcon.id = 'commentsIcon';
+                commentsIcon.onclick = () => showVideoComments(videoId);
+                videoPlayerDiv.appendChild(commentsIcon);
+
+                const descriptionIcon = document.createElement('i');
+                descriptionIcon.className = 'fas fa-info-circle';
+                descriptionIcon.id = 'descriptionIcon';
+                descriptionIcon.onclick = () => showVideoDescription(videoId);
+                videoPlayerDiv.appendChild(descriptionIcon);
+
+                videoPlayerDiv.style.display = 'block';
+            }
+
+            // Função para exibir a descrição do vídeo
+            function showVideoDescription(description) {
+                const videoDescriptionDiv = document.getElementById('videoDescription');
+                videoDescriptionDiv.innerHTML = '';
+
+                const descriptionParagraph = document.createElement('p');
+                descriptionParagraph.textContent = description;
+                videoDescriptionDiv.appendChild(descriptionParagraph);
+
+                const closeBtn = document.createElement('i');
+                closeBtn.className = 'fas fa-times close-btn';
+                closeBtn.onclick = () => videoDescriptionDiv.style.display = 'none';
+                videoDescriptionDiv.appendChild(closeBtn);
+
+                videoDescriptionDiv.style.display = 'block';
+            }
+
+            // Função para exibir os comentários do vídeo
+            function showVideoComments(videoId) {
+                const videoCommentsDiv = document.getElementById('videoComments');
+                videoCommentsDiv.innerHTML = '';
+
+                const videoCommentsUrl = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=AIzaSyCRkeAQ3cbtJmCwGg3Y1-I2BIcu6zSEdqE`;
+
+                fetch(videoCommentsUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.items.forEach(item => {
+                            const comment = item.snippet.topLevelComment.snippet.textDisplay;
+                            const commentParagraph = document.createElement('p');
+                            commentParagraph.textContent = comment;
+                            videoCommentsDiv.appendChild(commentParagraph);
+                        });
+                    })
+                    .catch(error => console.error('Erro ao obter comentários do vídeo: ', error));
+
+                const closeBtn = document.createElement('i');
+                closeBtn.className = 'fas fa-times close-btn';
+                closeBtn.onclick = () => videoCommentsDiv.style.display = 'none';
+                videoCommentsDiv.appendChild(closeBtn);
+
+                videoCommentsDiv.style.display = 'block';
+            }
+
+            // Função para carregar mais vídeos
+            function loadMoreVideos(searchTerm) {
+                const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchTerm)}&maxResults=5&pageToken=${nextPageToken}&type=video&key=AIzaSyCRkeAQ3cbtJmCwGg3Y1-I2BIcu6zSEdqE`;
+
+                fetch(searchUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResults = searchResults.concat(data.items);
+                        nextPageToken = data.nextPageToken;
+                        displaySearchResults(searchResults);
+                    })
+                    .catch(error => console.error('Erro ao carregar mais vídeos: ', error));
+            }
+        </script>
+    </main>
+</body>
+</html>

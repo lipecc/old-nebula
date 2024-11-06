@@ -1,0 +1,95 @@
+/* Estilos CSS para o corpo do site */
+body {
+    /* Recuperar cor de fundo do LocalStorage */
+    background: url("/media/mine.jpg") center center / cover no-repeat fixed; /* Adicionei 'fixed' para garantir que a imagem cubra a tela inteira */
+
+    
+    font-family: "Minecraft", Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+
+/* Estilos CSS para o cabeçalho */
+header {
+    padding: 10px;
+    text-align: center;
+    position: relative;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+p {
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Estilos CSS para o botão de configurações */
+.icone-engrenagem {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px; /* Tamanho do ícone */
+    height: 30px; /* Tamanho do ícone */
+    cursor: pointer;
+}
+
+/* Estilos CSS para a seção do botão Cubecraft */
+.secao-botao {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.botao-roxo {
+    background-color:  #0e8b89;;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.botao-roxo:hover {
+    background-color:  #0e8b89;; /* Roxo mais escuro quando o botão é destacado */
+}
+
+/* Estilos CSS para a seção do poste */
+.secao-poste {
+    background-color: #f2f2f2;
+    padding: 40px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.secao-poste h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.secao-poste p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Estilos CSS para a seção da jornada de desenvolvimento */
+.jornada-desenvolvimento {
+    background-color: #f2f2f2;
+    padding: 40px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.jornada-desenvolvimento h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.jornada-desenvolvimento p {
+    font-size: 18px;
+    line-height: 1.6;
+}

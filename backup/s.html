@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/styleI.css">
+</head>
+<body>
+
+    <div class="main">
+        <form>
+            <h1>Login</h1>
+            <fieldset>
+                <label for="username">Nome/Email</label>
+                <input type="text" id="username" name="conta" required>
+
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="senha" required>
+
+                <button type="button" id="login-button">Iniciar sessão</button> <!-- Mudança: type="button" -->
+            </fieldset>
+            <p>Não tem uma conta? <a href="criarConta.html">Cadastrar</a></p>
+            <p><a href="Recuperar.html">Esqueceu sua senha?</a></p>
+        </form>
+    </div>
+
+    <!-- Incluindo o arquivo JavaScript na pasta 'js' -->
+    <script src="js/javasI.js"></script>
+    <script>
+        // Adiciona um evento de clique ao botão de login
+        document.getElementById("login-button").addEventListener("click", login);
+    </script>
+</body>
+</html>

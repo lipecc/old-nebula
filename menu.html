@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/media/icon.png" type="image/x-icon">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>menu</title>
+    
+        <link rel="stylesheet" href="css/styleM.css">
+    
+    <!-- Fonte personalizada do Minecraft -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="https://replit.com/public/js/repl-auth-v2.js"></script>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <!-- Script em JavaScript para mostrar a data, hora e nome do jogador -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ccxt/4.1.31/ccxt.browser.min.js"></script>
+<script>
+            function exibirDataHoraENomeJogador() {
+                var dataHoraAtual = new Date();
+                var diaSemana = dataHoraAtual.toLocaleDateString('pt-BR', { weekday: 'long' });
+                var data = dataHoraAtual.toLocaleDateString('pt-BR');
+                var hora = dataHoraAtual.toLocaleTimeString('pt-BR');
+                var nomeJogador = localStorage.getItem('nomeJogador') || "Jogador"; // Recuperar nome do jogador ou usar "Jogador" como padrão
+
+                document.getElementById('diaSemana').textContent = diaSemana;
+                document.getElementById('data').textContent = data;
+                document.getElementById('hora').textContent = hora;
+                document.getElementById('nomeJogador').textContent = nomeJogador;
+            }
+
+            // Atualizar a data, hora e nome do jogador a cada segundo
+            setInterval(exibirDataHoraENomeJogador, 1000);
+        </script>
+
+        <!-- Ícone de engrenagem -->
+        <a href="index.html" class="icone-engrenagem">
+            <img src="media/sair.png" alt="Ícone de Engrenagem" style="width: 30px; height: 30px;">
+        </a>
+
+        <!-- Elementos para mostrar a data, hora e nome do jogador -->
+        <h1>Nebula Launcher Clien</h1>
+        <br>
+        <p>
+         <img src="media/minecraft.e.png" alt="Minha Imagem" width="250" height="60">
+          <br/>
+            <span id="diaSemana"></span>, <span id="data"></span> - <span id="hora"></span>
+            <br>
+           
+        
+    </header>
+
+    <!-- Seção do botão Minecraft -->
+    <div class="secao-botao">
+        <!-- Botão para redirecionar para a página "cubecraft/index.html" -->
+        <a href="minecraft/EaglercraftX_1.8_u27_Offline_Signed.html" class="botao-roxo">jogar</a>
+        <br>
+        <br>
+      <a href="coisas/nao-clica.html" class="botao-roxo">o</a>
+        <h6>Copyright © 2077 os guri. Todos os direitos reservados</h6>
+    </div>
+
+    <!-- Seção do poste -->
+      <div class="secao-poste">
+        <h2>O que já foi corrigido e adicionado ao site!</h2>
+        <p>
+            Olá, jogadores! Gostaríamos de compartilhar com vocês os progressos e melhorias que fizemos no Nebula Launcher Client:
+        </p>
+        <ul>
+             <!--<li>Corrigido o tamanho do botão de configurações, agora ele aparece com o tamanho adequado.</li> -->
+            <li> Adicionado o  <!--nome do jogador ao --> cabeçalho, para uma experiência personalizada.</li>
+             <!--<li>Adicionado um ícone de engrenagem para acessar as configurações do site.</li> -->
+        </ul>
+        <p>
+            Continuamos trabalhando para tornar sua experiência ainda mais incrível! Em breve, teremos mais atualizações e recursos emocionantes para você aproveitar.
+        </p>
+        <p>
+            Agradecemos por seu apoio e feedback contínuo. Divirta-se explorando o Nebula Launcher Client!
+        </p>
+    </div>
+
+</body>
+</html>
